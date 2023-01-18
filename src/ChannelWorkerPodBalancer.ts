@@ -1,5 +1,5 @@
-import { Bucket, OrderCountByCredentialId } from "./main";
 import Repository from "./Repository";
+import { Bucket, OrderCountByCredentialId } from "./Types";
 
 export class ChannelWorkerPodBalancer {
   private repository: Repository<OrderCountByCredentialId>;

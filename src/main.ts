@@ -1,19 +1,10 @@
 import * as dotenv from "dotenv";
-import mysql, { RowDataPacket } from "mysql2/promise";
+import mysql from "mysql2/promise";
 import { ChannelWorkerPodBalancer } from "./ChannelWorkerPodBalancer.js";
 import Repository from "./Repository.js";
+import { OrderCountByCredentialId } from "./Types.js";
 
 dotenv.config();
-
-export interface Bucket {
-  total: number;
-  credentialIds: number[];
-}
-
-export interface OrderCountByCredentialId extends RowDataPacket {
-  credential_id: number;
-  orderCount: number;
-}
 
 const connection = await mysql.createConnection({
   host: process.env.DB_HOST,
