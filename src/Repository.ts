@@ -8,6 +8,7 @@ export default class Repository<T extends RowDataPacket> {
     this.connection = connection;
   }
 
+  // counts order lines, groups by credential and sorts into descending order 
   fetchOrderCountFromDateGroupByCredentialId = async (date: Date) => {
     const dateString = new Date(date)
       .toISOString()
