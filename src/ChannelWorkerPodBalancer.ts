@@ -13,6 +13,7 @@ export class ChannelWorkerPodBalancer {
     return this.balancingAlgorithm(rows, noPods);
   };
 
+  // Note that this algorithm asssumes that the data has already been sorted into descending order by orderCount
   private balancingAlgorithm = (
     data: OrderCountByCredentialId[],
     noPods: number
