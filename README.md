@@ -8,8 +8,12 @@ This script retrieves orders for credentials on legacy worker, and sorts them in
 npm i
 ```
 
-## usage
+## run
 
 ```
-npx ts-node --esm ./src/main.ts
+npm run start
+```
+## test
+```
+npm t
 ```
