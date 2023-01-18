@@ -7,9 +7,9 @@ export class ChannelWorkerPodBalancer {
     this.repository = repository;
   }
 
-  balance = async (noPods: number) => {
+  balance = async (noPods: number, date: Date) => {
     const [rows] =
-      await this.repository.fetchOrderCountFromDateGroupByCredentialId();
+      await this.repository.fetchOrderCountFromDateGroupByCredentialId(date);
     return this.balancingAlgorithm(rows, noPods);
   };
 

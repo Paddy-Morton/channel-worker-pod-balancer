@@ -19,12 +19,20 @@ const connection = await mysql.createConnection({
 const repository = new Repository<OrderCountByCredentialId>(connection);
 const channelWorkerPodBalancer = new ChannelWorkerPodBalancer(repository);
 
-const input = prompt("How many pods are you attempting to balance?");
+const noPodsInput = prompt("How many pods are you attempting to balance?");
 
-const noPods = Number(input);
+const noPods = Number(noPodsInput);
 
 if (!Number.isInteger(noPods)) {
   throw new Error("Error: not an integer value");
 }
 
-console.log(await channelWorkerPodBalancer.balance(noPods));
+const dateInput = prompt("From which date should the order lines be counted?");
+
+const date = new Date(dateInput)
+
+if (!date) {
+  throw new Error("Error: invalid date format");
+}
+
+console.log(await channelWorkerPodBalancer.balance(noPods, date));
