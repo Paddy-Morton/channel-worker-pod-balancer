@@ -39,7 +39,10 @@ it("sorts three credentials correctly into two buckets when credentials are in d
   });
 
   const channelWorkerPodBalancer = new ChannelWorkerPodBalancer(mockRepository);
-  const buckets = await channelWorkerPodBalancer.balance(2);
+  const buckets = await channelWorkerPodBalancer.balance(
+    2,
+    new Date("2023-01-01")
+  );
 
   expect(buckets).toMatchObject([
     {
