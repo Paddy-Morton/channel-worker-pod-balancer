@@ -1,13 +1,54 @@
+import { FieldPacket } from "mysql2";
 import { createMock } from "ts-auto-mock";
-import balance from "../main";
+import { ChannelWorkerPodBalancer } from "../ChannelWorkerPodBalancer";
 import Repository from "../Repository";
+import { OrderCountByCredentialId } from "../Types";
 
-const mockRepository = createMock(Repository);
-jest.mock("./Repository", () =>
-  jest.fn().mockImplementation(() => mockRepository)
-);
-it("sorts three credentials correctly into two buckets", async () => {
-  const buckets = await balance(2);
+it("sorts three credentials correctly into two buckets when credentials are in descending order by orderCount", async () => {
+  const mockRepository = createMock<Repository<OrderCountByCredentialId>>({
+    fetchOrderCountFromDateGroupByCredentialId: async () => {
+      const dbResult: OrderCountByCredentialId[] = [
+        {
+          credential_id: 1,
+          orderCount: 3,
+          constructor: {
+            name: "RowDataPacket",
+          },
+        },
+        {
+          credential_id: 2,
+          orderCount: 2,
+          constructor: {
+            name: "RowDataPacket",
+          },
+        },
+        {
+          credential_id: 3,
+          orderCount: 1,
+          constructor: {
+            name: "RowDataPacket",
+          },
+        },
+      ];
+      const result: [OrderCountByCredentialId[], FieldPacket[]] = [
+        dbResult,
+        [],
+      ];
+      return result;
+    },
+  });
 
-  expect(buckets).toBe([{}, {}]);
+  const channelWorkerPodBalancer = new ChannelWorkerPodBalancer(mockRepository);
+  const buckets = await channelWorkerPodBalancer.balance(2);
+
+  expect(buckets).toMatchObject([
+    {
+      credentialIds: [1],
+      total: 3,
+    },
+    {
+      credentialIds: [2, 3],
+      total: 3,
+    },
+  ]);
 });
